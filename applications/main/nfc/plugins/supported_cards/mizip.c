@@ -155,10 +155,10 @@ static bool mizip_parse(const NfcDevice* device, FuriString* parsed_data) {
 
         //Get credit
         uint8_t credit_pointer = 0x08;
-        uint8_t previus_credit_pointer = 0x09;
+        //uint8_t previus_credit_pointer = 0x09;
         if(data->block[10].data[0] == 0x55) {
             credit_pointer = 0x09;
-            previus_credit_pointer = 0x08;
+            //previus_credit_pointer = 0x08;
         }
         uint16_t balance = (data->block[credit_pointer].data[2] << 8) |
                            (data->block[credit_pointer].data[1]);
