@@ -1,6 +1,7 @@
 #include "nfc_app_i.h"
 
 #include <dolphin/dolphin.h>
+#include <applications/main/archive/helpers/archive_helpers_ext.h>
 
 bool nfc_custom_event_callback(void* context, uint32_t event) {
     furi_assert(context);
@@ -343,7 +344,7 @@ bool nfc_load_file(NfcApp* instance, FuriString* path, bool show_dialog) {
     nfc_supported_cards_load_cache(instance->nfc_supported_cards);
 
     FuriString* load_path = furi_string_alloc();
-    if(nfc_has_shadow_file_internal(instance, path)) { //-V1051
+    if(nfc_has_shadow_file_internal(instance, path)) {
         nfc_set_shadow_file_path(path, load_path);
     } else if(furi_string_end_with(path, NFC_APP_SHADOW_EXTENSION)) {
         size_t path_len = furi_string_size(path);
@@ -472,6 +473,7 @@ int32_t nfc_app(void* p) {
     NfcApp* nfc = nfc_app_alloc();
     const char* args = p;
 
+    bool is_favorite = process_favorite_launch((char**)&args);
     if(args && strlen(args)) {
         if(sscanf(args, "RPC %p", &nfc->rpc_ctx) == 1) {
             rpc_system_app_set_callback(nfc->rpc_ctx, nfc_app_rpc_command_callback, nfc);
@@ -496,7 +498,11 @@ int32_t nfc_app(void* p) {
         scene_manager_next_scene(nfc->scene_manager, NfcSceneStart);
     }
 
-    view_dispatcher_run(nfc->view_dispatcher);
+    if(is_favorite) {
+        favorite_timeout_run(nfc->view_dispatcher, nfc->scene_manager);
+    } else {
+        view_dispatcher_run(nfc->view_dispatcher);
+    }
 
     nfc_app_free(nfc);
 
