@@ -159,7 +159,7 @@ static void nfc_protocol_support_scene_read_on_enter(NfcApp* instance) {
     view_dispatcher_switch_to_view(instance->view_dispatcher, NfcViewPopup);
     nfc_supported_cards_load_cache(instance->nfc_supported_cards);
 
-	// Start poller with the appropriate callback
+    // Start poller with the appropriate callback
     nfc_protocol_support[protocol]->scene_read.on_enter(instance);
 
     nfc_blink_detect_start(instance);
@@ -473,8 +473,15 @@ static void nfc_protocol_support_scene_save_name_on_enter(NfcApp* instance) {
     bool name_is_empty = furi_string_empty(instance->file_name);
     if(name_is_empty) {
         furi_string_set(instance->file_path, NFC_APP_FOLDER);
+        FuriString* prefix = furi_string_alloc_set(
+            nfc_device_get_name(instance->nfc_device, NfcDeviceNameTypeShort));
+        furi_string_replace(prefix, "Mifare", "MF");
+        furi_string_replace(prefix, "Ultralight", "UL");
+        furi_string_replace(prefix, " Plus", "+");
+        furi_string_replace_all(prefix, " ", "_");
         name_generator_make_auto(
-            instance->text_store, NFC_TEXT_STORE_SIZE, NFC_APP_FILENAME_PREFIX);
+            instance->text_store, NFC_TEXT_STORE_SIZE, furi_string_get_cstr(prefix));
+        furi_string_free(prefix);
         furi_string_set(folder_path, NFC_APP_FOLDER);
     } else {
         nfc_text_store_set(instance, "%s", furi_string_get_cstr(instance->file_name));
@@ -581,6 +588,7 @@ static void nfc_protocol_support_scene_emulate_on_enter(NfcApp* instance) {
         widget_add_string_element(widget, 90, 13, AlignCenter, AlignTop, FontPrimary, "Emulating");
         furi_string_set(
             temp_str, nfc_device_get_name(instance->nfc_device, NfcDeviceNameTypeFull));
+        furi_string_cat_printf(temp_str, "\n%s", furi_string_get_cstr(instance->file_name));
     }
 
     widget_add_text_box_element(
