@@ -188,18 +188,18 @@ const FuriHalNfcTechBase furi_hal_nfc_felica = {
             .rx = furi_hal_nfc_common_fifo_rx,
         },
 
-    .listener =
-        {
-            .compensation =
-                {
-                    .fdt = FURI_HAL_NFC_FELICA_LISTENER_FDT_COMP_FC,
-                },
-            .init = furi_hal_nfc_felica_listener_init,
-            .deinit = furi_hal_nfc_felica_listener_deinit,
-            .wait_event = furi_hal_nfc_felica_listener_wait_event,
-            .tx = furi_hal_nfc_felica_listener_tx,
-            .rx = furi_hal_nfc_common_fifo_rx,
-            .sleep = furi_hal_nfc_felica_listener_sleep,
-            .idle = furi_hal_nfc_felica_listener_idle,
-        },
+	.listener =
+	{
+		.compensation =
+			{
+				.fdt = FURI_HAL_NFC_FELICA_LISTENER_FDT_COMP_FC,
+			},
+		.init = furi_hal_nfc_felica_listener_init,
+		.deinit = furi_hal_nfc_felica_listener_deinit,
+		.wait_event = furi_hal_nfc_felica_listener_wait_event,
+		.tx = furi_hal_nfc_felica_listener_tx,
+		.rx = furi_hal_nfc_common_fifo_rx,
+		.sleep = furi_hal_nfc_felica_listener_sleep,
+		.idle = furi_hal_nfc_felica_listener_idle,
+	},
 };
