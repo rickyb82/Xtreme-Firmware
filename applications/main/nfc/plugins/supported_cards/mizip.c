@@ -172,12 +172,7 @@ static bool mizip_parse(const NfcDevice* device, FuriString* parsed_data) {
             furi_string_cat_printf(parsed_data, " %02X", uid[i]);
         }
         furi_string_cat_printf(
-            parsed_data, "\nCurrent Credit: %d.%02d E \n", balance / 100, balance % 100);
-        furi_string_cat_printf(
-            parsed_data,
-            "Previus Credit: %d.%02d E \n",
-            previus_balance / 100,
-            previus_balance % 100);
+            parsed_data, "\nCredito Residuo: %d.%02d E \n", balance / 100, balance % 100);
 
         parsed = true;
     } while(false);
