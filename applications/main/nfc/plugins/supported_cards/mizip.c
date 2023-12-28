@@ -162,9 +162,9 @@ static bool mizip_parse(const NfcDevice* device, FuriString* parsed_data) {
         }
         uint16_t balance = (data->block[credit_pointer].data[2] << 8) |
                            (data->block[credit_pointer].data[1]);
-        uint16_t previus_balance = (data->block[previus_credit_pointer].data[2] << 8) |
-                                   (data->block[previus_credit_pointer].data[1]);
-
+        /*uint16_t previus_balance = (data->block[previus_credit_pointer].data[2] << 8) |
+                                 (data->block[previus_credit_pointer].data[1]);
+        */ 
         //parse data
         furi_string_cat_printf(parsed_data, "\e#MiZIP Card\n");
         furi_string_cat_printf(parsed_data, "UID:");
@@ -173,6 +173,11 @@ static bool mizip_parse(const NfcDevice* device, FuriString* parsed_data) {
         }
         furi_string_cat_printf(
             parsed_data, "\nCredito Residuo: %d.%02d E \n", balance / 100, balance % 100);
+        /*furi_string_cat_printf(
+            parsed_data,
+            "Previus Credit: %d.%02d E \n",
+            previus_balance / 100,
+            previus_balance % 100);*/
 
         parsed = true;
     } while(false);
