@@ -167,12 +167,35 @@ static bool mizip_parse(const NfcDevice* device, FuriString* parsed_data) {
         */ 
         //parse data
         furi_string_cat_printf(parsed_data, "\e#MiZIP Card\n");
+        char *owner_card;
+        owner_card = "Carta non in DB, Aggiungerla per usi futuri";
         furi_string_cat_printf(parsed_data, "UID:");
         for(size_t i = 0; i < UID_LENGTH; i++) {
+            
             furi_string_cat_printf(parsed_data, " %02X", uid[i]);
+            
         }
+        
+
+        if(uid[0]==0x2D)
+            if(uid[1]==0xDD)
+                if(uid[2]==0x15)
+                    if(uid[3]==0x74){
+                    owner_card = "Conco Card Riconosciuta";
+                    
+            }
+        
+
+        if(uid[0]==0xDA)
+            if(uid[1]==0xD0)
+                if(uid[2]==0x19)
+                    if(uid[3]==0x82)
+            owner_card = "Ricky Card Riconosciuta";
+        
+        furi_string_cat_printf(parsed_data, "\n%s", owner_card);
         furi_string_cat_printf(
             parsed_data, "\nCredito Residuo: %d.%02d E \n", balance / 100, balance % 100);
+
         /*furi_string_cat_printf(
             parsed_data,
             "Previus Credit: %d.%02d E \n",
